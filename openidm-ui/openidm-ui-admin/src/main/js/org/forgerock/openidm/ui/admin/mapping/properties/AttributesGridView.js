@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions copyright 2026 3A Systems, LLC.
  */
 
 define([
@@ -111,7 +112,13 @@ define([
                 this.data.mapProps = mapProps;
 
                 if (this.data.usesDynamicSampleSource) {
-                    let autocompleteProps = _.pluck(this.model.mapping.properties,"source").slice(0, this.model.numRepresentativeProps);
+                    // Only keep properties that actually define a "source"; otherwise the
+                    // first representative property may be undefined and break the sample
+                    // search query (empty _sortKeys= => HTTP 500). See discussion #186.
+                    // Use native Array filter/slice (lodash 3 _.first ignores the count arg).
+                    let autocompleteProps = _.pluck(this.model.mapping.properties, "source")
+                        .filter((source) => !!source)
+                        .slice(0, this.model.numRepresentativeProps);
 
                     mappingUtils.setupSampleSearch($("#findSampleSource", this.$el), this.model.mapping, autocompleteProps, (item)  => {
                         item.IDMSampleMappingName = this.model.mapping.name;

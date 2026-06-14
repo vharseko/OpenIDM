@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions copyright 2026 3A Systems, LLC.
  */
 
 define([
@@ -79,7 +80,13 @@ define([
         },
 
         setupSearch: function(){
-            var autocompleteProps = _.pluck(this.data.mapping.properties,"source").slice(0,this.getNumRepresentativeProps());
+            // Only keep properties that actually define a "source"; otherwise the
+            // first representative property may be undefined and break the sample
+            // search query (empty _sortKeys= => HTTP 500). See discussion #186.
+            // Use native Array filter/slice (lodash 3 _.first ignores the count arg).
+            var autocompleteProps = _.pluck(this.data.mapping.properties, "source")
+                .filter(function(source){ return !!source; })
+                .slice(0, this.getNumRepresentativeProps());
 
             mappingUtils.setupSampleSearch($("#findSampleSource",this.$el), this.data.mapping, autocompleteProps, _.bind(function(item) {
                 conf.globalData.testSyncSource = item;

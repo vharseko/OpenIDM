@@ -70,8 +70,15 @@ define([
             this.mapping = this.getCurrentMapping();
             this.mappingSync = this.getSyncNow();
             this.data.numRepresentativeProps = this.getNumRepresentativeProps();
-            this.data.sourceProps = _.pluck(this.mapping.properties,"source").slice(0,this.data.numRepresentativeProps);
-            this.data.targetProps = _.pluck(this.mapping.properties,"target").slice(0,this.data.numRepresentativeProps);
+            // Only keep properties that actually define a "source"/"target"; a leading
+            // undefined value would break the sample search query. See discussion #186.
+            // Use native Array filter/slice (lodash 3 _.first ignores the count arg).
+            this.data.sourceProps = _.pluck(this.mapping.properties, "source")
+                .filter(function(source){ return !!source; })
+                .slice(0, this.data.numRepresentativeProps);
+            this.data.targetProps = _.pluck(this.mapping.properties, "target")
+                .filter(function(target){ return !!target; })
+                .slice(0, this.data.numRepresentativeProps);
             this.data.hideSingleRecordReconButton = mappingUtils.readOnlySituationalPolicy(this.mapping.policies);
 
             this.data.reconAvailable = false;
