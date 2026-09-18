@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2012-2016 ForgeRock AS.
+ * Portions Copyright 2026 3A Systems, LLC.
  */
 package org.forgerock.openidm.quartz.impl;
 
@@ -174,7 +175,12 @@ public class RepoJobStore implements JobStore, ClusterEventListener {
         this.schedulerSignaler = schedSignaler;
         this.loadHelper = loadHelper;
         // Set the number of retries for failed writes to the repository
-        this.writeRetries = Integer.parseInt(IdentityServer.getInstance().getProperty("openidm.scheduler.repo.retry", "-1"));
+        String retries = IdentityServer.getInstance().getProperty("openidm.scheduler.repo.retry", "-1");
+        try {
+            this.writeRetries = Integer.parseInt(retries);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("openidm.scheduler.repo.retry must be an integer, found: " + retries, e);
+        }
     }
 
     public boolean setClusterService() {

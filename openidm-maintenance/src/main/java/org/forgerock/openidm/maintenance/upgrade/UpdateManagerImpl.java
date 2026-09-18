@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions Copyrighted 2024 3A Systems LLC.
+ * Portions Copyrighted 2024-2026 3A Systems LLC.
  */
 package org.forgerock.openidm.maintenance.upgrade;
 
@@ -798,9 +798,8 @@ public class UpdateManagerImpl implements UpdateManager {
             if (!file.exists()) {
                 throw new UpdateException("Unable to locate a license file.");
             }
-            try (FileInputStream inp = new FileInputStream(file)) {
-                byte[] data = new byte[(int) file.length()];
-                inp.read(data);
+            try {
+                byte[] data = Files.readAllBytes(file.toPath());
                 return json(object(field("license", new String(data, "UTF-8"))));
             } catch (IOException e) {
                 throw new UpdateException("Unable to load license file.", e);
