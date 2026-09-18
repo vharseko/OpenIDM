@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2012-2016 ForgeRock AS.
+ * Portions Copyright 2026 3A Systems, LLC.
  */
 package org.forgerock.openidm.quartz.impl;
 
@@ -2259,6 +2260,9 @@ public class RepoJobStore implements JobStore, ClusterEventListener {
         case INSTANCE_FAILED:
             break;
         case INSTANCE_RUNNING:
+            break;
+        default:
+            logger.debug("Ignoring cluster event {} from instance {}", event.getType(), eventInstanceId);
             break;
         }
         return true;
