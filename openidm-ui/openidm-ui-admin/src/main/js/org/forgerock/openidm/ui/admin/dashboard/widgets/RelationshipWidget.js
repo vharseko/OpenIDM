@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2016 ForgeRock AS.
+ * Portions Copyright 2026 3A Systems, LLC.
  */
 
 define([
@@ -179,7 +180,6 @@ define([
                     nodeSet,
                     linkSet = [],
                     nodeCounter = 0,
-                    tempRef,
                     titleNodeId,
                     getNodeData = function (item, itemType, itemObject , resourceCollection) {
                         var nameTextArr = [],
@@ -333,7 +333,6 @@ define([
                  * or in the case of arrays of relationships all the array item property values
                  */
                 _.each(this.data.relationshipProps, function (prop) {
-                    var propKey;
                     
                     if (details[prop.propName]) {
                         if (details[prop.propName].length || (prop.type === "relationship" && !_.isEmpty(details[prop.propName]))) {
@@ -570,7 +569,6 @@ define([
                 var thisObject = d3.select(this).select("input"),
                     type_value = thisObject.attr("type_value"),
                     checked = $(thisObject[0]).prop('checked'),
-                    id = thisObject.attr("id"),
                     nodes = $('.node[type_value|="' + type_value + '"]'),//circles
                     links = $('.linkType-' + type_value.replace(/ /g, "_")),//lines connected to main node
                     sublinks = $("[class|='linkType-" + type_value.replace(/ /g, "_") + "']");//lines connected to sub nodes
