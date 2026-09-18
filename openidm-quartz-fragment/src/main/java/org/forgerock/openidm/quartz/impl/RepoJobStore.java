@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2012-2016 ForgeRock AS.
+ * Portions Copyright 2026 3A Systems, LLC.
  */
 package org.forgerock.openidm.quartz.impl;
 
@@ -133,11 +134,6 @@ public class RepoJobStore implements JobStore, ClusterEventListener {
      * Number of retries on failed writes to the repository (defaults to -1, infinite).
      */
     private int writeRetries = -1;
-
-    /**
-     * A list of all "blocked" jobs.
-     */
-    private List<String> blockedJobs = new ArrayList<>();
 
     /**
      * An AtomicLong used for creating record IDs
@@ -1367,7 +1363,6 @@ public class RepoJobStore implements JobStore, ClusterEventListener {
                         removeWaitingTrigger(t);
                     }
                 }
-                blockedJobs.add(getJobNameKey(job));
             } else if (localTrigger.getNextFireTime() != null) {
                 addWaitingTrigger(localTrigger);
             }
@@ -1409,7 +1404,6 @@ public class RepoJobStore implements JobStore, ClusterEventListener {
                         newData.clearDirtyFlag();
                     }
                     jd.setJobDataMap(newData);
-                    blockedJobs.remove(getJobNameKey(jd));
                     Trigger[] triggers = getTriggersForJob(context, jd.getName(), jd.getGroup());
                     for (Trigger t : triggers) {
                         TriggerWrapper tmpTw = getTriggerWrapper(t.getGroup(), t.getName());
@@ -1428,8 +1422,6 @@ public class RepoJobStore implements JobStore, ClusterEventListener {
                     }
                     schedulerSignaler.signalSchedulingChange(0L);
                 }
-            } else {
-                blockedJobs.remove(jobKey);
             }
 
             if (tw != null) {
