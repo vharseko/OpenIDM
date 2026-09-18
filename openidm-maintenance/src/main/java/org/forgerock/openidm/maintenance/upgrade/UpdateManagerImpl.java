@@ -12,7 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
- * Portions Copyrighted 2024 3A Systems LLC.
+ * Portions Copyrighted 2024-2026 3A Systems LLC.
  */
 package org.forgerock.openidm.maintenance.upgrade;
 
@@ -937,6 +937,7 @@ public class UpdateManagerImpl implements UpdateManager {
             this.repoUpdates = listRequiredRepoUpdates(archive, fileStateChecker);
         }
 
+        @Override
         public void run() {
             try {
                 final String projectDir = IdentityServer.getInstance().getProjectLocation().toString();

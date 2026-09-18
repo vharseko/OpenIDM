@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyright 2026 3A Systems, LLC.
  */
 package org.forgerock.openidm.shell.impl;
 
@@ -877,6 +878,7 @@ public class UpdateCommand {
          * @return implemented to return true if the archive data is null or doesn't need to restart and therefore we
          * should exit maintenance mode and if the archive data is null.
          */
+        @Override
         public boolean onCondition(UpdateExecutionState state) {
             return !isRestartRequired(state);
         }
@@ -924,6 +926,7 @@ public class UpdateCommand {
          * @return implemented to return true if the archive data is null or doesn't need to restart and therefore we
          * should exit maintenance mode and if the archive data is null.
          */
+        @Override
         public boolean onCondition(UpdateExecutionState state) {
             return !isRestartRequired(state);
         }

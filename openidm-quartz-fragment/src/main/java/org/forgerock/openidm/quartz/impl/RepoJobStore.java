@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2012-2016 ForgeRock AS.
+ * Portions Copyright 2026 3A Systems, LLC.
  */
 package org.forgerock.openidm.quartz.impl;
 
@@ -2120,6 +2121,7 @@ public class RepoJobStore implements JobStore, ClusterEventListener {
      */
     protected class TriggerComparator implements Comparator<Trigger> {
 
+        @Override
         public int compare(Trigger t1, Trigger t2) {
             // First compare by nextFireTime()
             int result = t1.compareTo(t2);

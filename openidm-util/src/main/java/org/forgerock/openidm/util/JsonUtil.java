@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Portions copyright 2011-2016 ForgeRock AS.
+ * Portions Copyright 2026 3A Systems, LLC.
  */
 
 package org.forgerock.openidm.util;
@@ -252,6 +253,7 @@ public final class JsonUtil {
             this.noOfSpaces = noOfSpaces;
         }
 
+        @Override
         public boolean isInline() {
             return false;
         }
