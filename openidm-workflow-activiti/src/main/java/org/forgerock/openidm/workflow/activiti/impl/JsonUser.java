@@ -62,6 +62,17 @@ public class JsonUser extends JsonValue implements User, Externalizable {
         super(value);
     }
 
+    /**
+     * {@link JsonValue#clone()} returns a plain {@code JsonValue}; keep the user type and the
+     * crypto service so the copy can still decrypt its password.
+     */
+    @Override
+    public JsonUser clone() {
+        JsonUser copy = new JsonUser(super.clone());
+        copy.cryptoService = cryptoService;
+        return copy;
+    }
+
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(new LinkedHashMap<String, Object>(asMap()));
